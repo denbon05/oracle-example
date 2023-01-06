@@ -1,0 +1,37 @@
+{
+  "name": "oracle-example",
+  "version": "0.1.0",
+  "description": "Practice in creating an oracle",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx truffle test"
+  },
+  "keywords": [
+    "oracle",
+    "blockchain",
+    "web3",
+    "cryptozombies"
+  ],
+  "author": "Denys Bondarenko",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.0",
+    "axios": "^1.2.2",
+    "bn.js": "^5.2.1",
+    "loom-js": "^1.79.0",
+    "loom-truffle-provider": "^0.15.0",
+    "openzeppelin-solidity": "^4.6.0",
+    "truffle": "^5.7.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-config-standard-with-typescript": "^26.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^2.8.1",
+    "solhint": "^3.3.7",
+    "typescript": "^4.9.4"
+  }
+}
