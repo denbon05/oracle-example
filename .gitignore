@@ -1,4 +1,5 @@
 node_modules
 build
+*_private_key
 .vscode
 .env

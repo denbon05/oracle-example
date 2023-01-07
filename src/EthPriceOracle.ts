@@ -1,15 +1,17 @@
-import axios from 'axios';
-import BN from 'bn.js';
-import type Web3 from 'web3';
-import { Contract, EventData } from 'web3-eth-contract';
-import type { AbiItem } from 'web3-utils';
-import * as common from './utils/common';
-import OracleJSON from '../oracle/build/contracts/EthPriceOracle.json';
+import axios from "axios";
+import BN from "bn.js";
+import type Web3 from "web3";
+import { Contract, EventData } from "web3-eth-contract";
+import type { AbiItem } from "web3-utils";
+import path from "path";
+import * as common from "./utils/common";
+import OracleJSON from "../oracle/build/contracts/EthPriceOracle.json";
 
 // todo: refactor
 const SLEEP_INTERVAL = Number(process.env.SLEEP_INTERVAL) || 2000;
 const PRIVATE_KEY_FILE_NAME =
-  process.env.PRIVATE_KEY_FILE || './oracle/oracle_private_key';
+  process.env.PRIVATE_KEY_FILE ||
+  path.join(__dirname, "..", "oracle/oracle_private_key");
 const CHUNK_SIZE = process.env.CHUNK_SIZE || 3;
 const MAX_RETRIES = Number(process.env.MAX_RETRIES) || 5;
 
@@ -19,7 +21,7 @@ const getOracleContract = async (web3js: Web3) => {
   const networkId = await web3js.eth.net.getId();
   return new web3js.eth.Contract(
     OracleJSON.abi as AbiItem[],
-    OracleJSON.networks[networkId].address,
+    OracleJSON.networks[networkId].address
   );
 };
 
@@ -27,12 +29,13 @@ async function retrieveLatestEthPrice() {
   const {
     data: { price },
   } = await axios({
-    url: 'https://api.binance.com/api/v3/ticker/price',
+    url: "https://api.binance.com/api/v3/ticker/price",
     params: {
-      symbol: 'ETHUSDT',
+      symbol: "ETHUSDT",
     },
-    method: 'get',
+    method: "get",
   });
+
   return price;
 }
 
@@ -43,20 +46,21 @@ async function setLatestEthPrice({
   ethPrice,
   id,
 }) {
-  const ethPriceDecimal = ethPrice.replace('.', '');
+  const ethPriceDecimal = ethPrice.replace(".", "");
   const multiplier = new BN(10 ** 10, 10);
   const ethPriceInt = new BN(parseInt(ethPriceDecimal), 10).mul(multiplier);
   const idInt = new BN(parseInt(id));
+
   try {
     await oracleContract.methods
       .setLatestEthPrice(
         ethPriceInt.toString(),
         callerAddress,
-        idInt.toString(),
+        idInt.toString()
       )
       .send({ from: ownerAddress });
   } catch (error) {
-    console.log('Error encountered while calling setLatestEthPrice.');
+    console.log("Error encountered while calling setLatestEthPrice.");
     // Do some error handling
   }
 }
@@ -96,6 +100,7 @@ const processRequest = async ({
       }
 
       retries += 1;
+      console.log({ retries });
     }
   }
 };
@@ -118,15 +123,16 @@ const processQueue = async (oracleContract: Contract, ownerAddress: string) => {
 };
 
 const addRequestToQueue = async (event: EventData) => {
-  const callerAddress = event.returnValues.from;
+  const { callerAddress } = event.returnValues;
   const { id } = event.returnValues;
+
   pendingRequests.push({ callerAddress, id });
 };
 
 const filterEvents = async (oracleContract: Contract, web3js: Web3) => {
   oracleContract.events.GetLatestEthPriceEvent(async (err, event) => {
     if (err) {
-      console.error('Error on event', err);
+      console.error("Error on event", err);
       return;
     }
 
@@ -135,8 +141,7 @@ const filterEvents = async (oracleContract: Contract, web3js: Web3) => {
 
   oracleContract.events.SetLatestEthPriceEvent(async (err, event) => {
     if (err) {
-      console.error('Error on event', err);
-      return;
+      console.error("Error on event", err);
     }
     // Do something
   });
@@ -144,7 +149,7 @@ const filterEvents = async (oracleContract: Contract, web3js: Web3) => {
 
 const init = async () => {
   const { client, ownerAddress, web3js } = common.loadAccount(
-    PRIVATE_KEY_FILE_NAME,
+    PRIVATE_KEY_FILE_NAME
   );
 
   const oracleContract = await getOracleContract(web3js);
@@ -159,8 +164,9 @@ const init = async () => {
 
 (async () => {
   const { oracleContract, ownerAddress, client } = await init();
-  process.on('SIGINT', () => {
-    console.log('Calling client.disconnect()');
+
+  process.on("SIGINT", () => {
+    console.log("Calling client.disconnect()");
     client.disconnect();
     process.exit();
   });

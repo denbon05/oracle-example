@@ -42,6 +42,9 @@
  * https://trufflesuite.com/docs/truffle/getting-started/using-the-truffle-dashboard/
  */
 
+const LoomTruffleProvider = require('loom-truffle-provider');
+const fs = require('fs');
+const path = require('path');
 // require('dotenv').config();
 // const { MNEMONIC, PROJECT_ID } = process.env;
 
@@ -90,6 +93,19 @@ module.exports = {
     //   timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     //   skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
+    extdev: {
+      provider: () => {
+        const privateKey = fs.readFileSync(
+          path.join(__dirname, 'oracle_private_key'),
+          'utf-8',
+        );
+        const chainId = 'extdev-plasma-us1';
+        const writeUrl = 'wss://extdev-plasma-us1.dappchains.com/websocket';
+        const readUrl = 'wss://extdev-plasma-us1.dappchains.com/queryws';
+        return new LoomTruffleProvider(chainId, writeUrl, readUrl, privateKey);
+      },
+      network_id: '9545242630824',
+    },
     //
     // Useful for private networks
     // private: {

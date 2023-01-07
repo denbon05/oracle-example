@@ -2,9 +2,10 @@
   "name": "oracle-example",
   "version": "0.1.0",
   "description": "Practice in creating an oracle",
-  "main": "index.js",
   "scripts": {
-    "test": "npx truffle test"
+    "test": "npx truffle test",
+    "start-oracle": "npx ts-node src/EthPriceOracle.ts",
+    "start-client": "npx ts-node src/Client.ts"
   },
   "keywords": [
     "oracle",
@@ -30,11 +31,13 @@
     "@typescript-eslint/parser": "^5.48.0",
     "eslint": "^8.31.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard-with-typescript": "^26.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.2",
     "solhint": "^3.3.7",
     "typescript": "^4.9.4"
   }

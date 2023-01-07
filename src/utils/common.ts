@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import fs from 'fs';
-import Web3 from 'web3';
+import fs from "fs";
+import Web3 from "web3";
 import {
   Client,
   NonceTxMiddleware,
@@ -8,24 +8,24 @@ import {
   LocalAddress,
   CryptoUtils,
   LoomProvider,
-} from 'loom-js';
+} from "loom-js";
 
 export function loadAccount(privateKeyFileName: string) {
-  const extdevChainId = 'extdev-plasma-us1';
-  const privateKeyStr = fs.readFileSync(privateKeyFileName, 'utf-8');
+  const extdevChainId = "extdev-plasma-us1";
+  const privateKeyStr = fs.readFileSync(privateKeyFileName, "utf-8");
   const privateKey = CryptoUtils.B64ToUint8Array(privateKeyStr);
   const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
   const client = new Client(
     extdevChainId,
-    'wss://extdev-plasma-us1.dappchains.com/websocket',
-    'wss://extdev-plasma-us1.dappchains.com/queryws',
+    "wss://extdev-plasma-us1.dappchains.com/websocket",
+    "wss://extdev-plasma-us1.dappchains.com/queryws"
   );
   client.txMiddleware = [
     new NonceTxMiddleware(publicKey, client),
     new SignedTxMiddleware(privateKey),
   ];
-  client.on('error', (msg) => {
-    console.error('Connection error', msg);
+  client.on("error", (msg) => {
+    console.error("Connection error", msg);
   });
   return {
     ownerAddress: LocalAddress.fromPublicKey(publicKey).toString(),
