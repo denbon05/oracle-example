@@ -32,3 +32,13 @@ start-oracle:
 
 start-client:
 	npm run start-client
+
+# Dev
+
+dev:
+	npm run dev
+
+deploy-ganche:
+	for name in $(ITEMS); do \
+		cd $$name && npx truffle migrate --network development --reset -all; \
+	done

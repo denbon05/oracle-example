@@ -95,5 +95,9 @@
   "include": [
     "src",
     "scripts"
+  ],
+  "exclude": [
+    "oracle",
+    "client"
   ]
 }

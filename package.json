@@ -4,6 +4,7 @@
   "description": "Practice in creating an oracle",
   "scripts": {
     "test": "npx truffle test",
+    "dev": "npx ganache",
     "start-oracle": "npx ts-node src/EthPriceOracle.ts",
     "start-client": "npx ts-node src/Client.ts"
   },
@@ -37,6 +38,7 @@
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
+    "ganache": "^7.7.2",
     "prettier": "^2.8.2",
     "solhint": "^3.3.7",
     "typescript": "^4.9.4"

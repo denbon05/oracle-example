@@ -23,12 +23,16 @@
   "rules": {
     "no-console": "off",
     "radix": "off",
-    "prettier/prettier": "warn",
-    "max-len": [
+    "prettier/prettier": [
       "warn",
       {
-        "code": 80
+        "singleQuote": false,
+        "printWidth": 80
       }
     ]
-  }
+  },
+  "ignorePatterns": [
+    "**/migrations/*",
+    "build/**"
+  ]
 }
